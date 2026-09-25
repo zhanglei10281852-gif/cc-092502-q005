@@ -115,6 +115,8 @@ def close_connection() -> None:
 
 def init_db() -> None:
     connection().executescript(SCHEMA)
+    from app.zooarch.schema import ZOO_SCHEMA
+    connection().executescript(ZOO_SCHEMA)
 
 
 @contextmanager
