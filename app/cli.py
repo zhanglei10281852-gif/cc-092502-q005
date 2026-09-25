@@ -6,6 +6,7 @@ import json
 from fastapi.testclient import TestClient
 
 from app.database import connection, init_db
+from app.zoo_schema import init_zoo_db
 
 
 def main() -> int:
@@ -14,10 +15,12 @@ def main() -> int:
     args = parser.parse_args()
     if args.command == "init-db":
         init_db()
+        init_zoo_db()
         print(json.dumps({"status": "initialized"}, ensure_ascii=False))
         return 0
     if args.command == "check-db":
         init_db()
+        init_zoo_db()
         db = connection()
         print(json.dumps({"integrity": db.execute("PRAGMA integrity_check").fetchone()[0], "foreign_keys": db.execute("PRAGMA foreign_keys").fetchone()[0], "tables": db.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'").fetchone()[0]}, ensure_ascii=False))
         return 0
